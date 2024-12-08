@@ -1,5 +1,6 @@
 import React, { use, useActionState } from "react";
 import { OpinionsContext } from "../store/OpinionContext.tsx";
+import Submit from "./Submit.tsx";
 
 const NewOpinion: React.FC = () => {
   const { addOpinion } = use(OpinionsContext);
@@ -108,9 +109,7 @@ const NewOpinion: React.FC = () => {
           </ul>
         )}
 
-        <p className="actions">
-          <button type="submit">Submit</button>
-        </p>
+        <Submit />
       </form>
     </div>
   );
