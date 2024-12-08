@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import React, { use, useActionState } from "react";
 import { OpinionsContext, type TOpinion } from "../store/OpinionContext.tsx";
 
 type Props = {
@@ -17,6 +17,14 @@ const Opinion: React.FC<Props> = ({ opinion }) => {
     await downvoteOpinion(id as string);
   }
 
+  const [upvoteFormState, upvoteFormAction, upvoteFormPending] = useActionState(
+    upvodeAction,
+    null,
+  );
+
+  const [downvoteFormState, downvoteFormAction, downvoteFormPending] =
+    useActionState(downvodeAction, null);
+
   return (
     <article>
       <header>
@@ -25,7 +33,10 @@ const Opinion: React.FC<Props> = ({ opinion }) => {
       </header>
       <p>{body}</p>
       <form className="votes">
-        <button formAction={upvodeAction}>
+        <button
+          formAction={upvoteFormAction}
+          disabled={upvoteFormPending || downvoteFormPending}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -45,7 +56,10 @@ const Opinion: React.FC<Props> = ({ opinion }) => {
 
         <span>{votes}</span>
 
-        <button formAction={downvodeAction}>
+        <button
+          formAction={downvoteFormAction}
+          disabled={downvoteFormPending || upvoteFormPending}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
