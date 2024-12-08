@@ -1,4 +1,4 @@
-import React, { use, useActionState } from "react";
+import React, { use, useActionState, useOptimistic } from "react";
 import { OpinionsContext, type TOpinion } from "../store/OpinionContext.tsx";
 
 type Props = {
@@ -9,11 +9,40 @@ const Opinion: React.FC<Props> = ({ opinion }) => {
   const { id, title, body, votes, userName } = opinion;
   const { upvoteOpinion, downvoteOpinion } = use(OpinionsContext);
 
+  /**
+   * ### React `useOptimistic` Hook
+   * The `useOptimistic` hook is designed to manage optimistic UI updates.
+   * It helps in anticipating the outcome of an operation typically involving server interaction,
+   * but allows the UI to reflect the anticipated state without waiting for a server response.
+   *
+   * #### Parameters
+   *
+   * #### Parameters
+   *
+   * `useOptimistic` requires two arguments:
+   *
+   * 1. Initial State:
+   *    This is the initial state that you want to optimistically update while an asynchronous operation is pending.
+   *    It is the state on which the optimistic updates are based. In our example, this is initially set to the number of `votes`.
+   * 2. Reducer Function:
+   *    This function determines how the state should be updated optimistically. It receives two parameters:
+   *     - Previous State: The previous state of the data you wish to optimistically update. This helps in deciding how the state should transition optimistically.
+   *     - Parameter: This is the parameter that you pass when calling the setter function, like `setOptimisticVotes()`. In the given example, it's the mode ("up" or "down"), determining whether to increase or decrease the votes.
+   *     After "prevVotes" we can have as many arguments as we passed to the setOptimisticVotes function
+   */
+  const [optimisticVotes, setOptimisticVotes] = useOptimistic(
+    votes as number,
+    (prevVotes: number, mode: "up" | "down") =>
+      mode === "up" ? prevVotes + 1 : prevVotes - 1,
+  );
+
   async function upvodeAction() {
+    setOptimisticVotes("up");
     await upvoteOpinion(id as string);
   }
 
   async function downvodeAction() {
+    setOptimisticVotes("down");
     await downvoteOpinion(id as string);
   }
 
@@ -54,7 +83,7 @@ const Opinion: React.FC<Props> = ({ opinion }) => {
           </svg>
         </button>
 
-        <span>{votes}</span>
+        <span>{optimisticVotes}</span>
 
         <button
           formAction={downvoteFormAction}
