@@ -59,22 +59,46 @@ const OpinionsContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setOpinions((prevOpinions) => [savedOpinion, ...prevOpinions]);
   }
 
-  function upvoteOpinion(id: string) {
+  async function upvoteOpinion(id: string) {
+    const response = await fetch(
+      `http://localhost:3000/opinions/${id}/upvote`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (!response.ok) return;
+
     setOpinions((prevOpinions) => {
       return (prevOpinions as TOpinion[]).map((opinion) => {
         if (opinion.id === id) {
-          return { ...opinion, votes: opinion.votes + 1 };
+          return { ...opinion, votes: opinion?.votes + 1 };
         }
         return opinion;
       });
     });
   }
 
-  function downvoteOpinion(id: string) {
+  async function downvoteOpinion(id: string) {
+    const response = await fetch(
+      `http://localhost:3000/opinions/${id}/downvote`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (!response.ok) return;
+
     setOpinions((prevOpinions) => {
       return prevOpinions?.map((opinion) => {
         if (opinion.id === id) {
-          return { ...opinion, votes: opinion.votes - 1 };
+          return { ...opinion, votes: opinion?.votes - 1 };
         }
         return opinion;
       });

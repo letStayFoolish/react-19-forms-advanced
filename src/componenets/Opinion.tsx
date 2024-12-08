@@ -1,12 +1,21 @@
-import React from "react";
-import { type TOpinion } from "../store/OpinionContext.tsx";
+import React, { use } from "react";
+import { OpinionsContext, type TOpinion } from "../store/OpinionContext.tsx";
 
 type Props = {
   opinion: TOpinion;
 };
 
 const Opinion: React.FC<Props> = ({ opinion }) => {
-  const { title, body, votes, userName } = opinion;
+  const { id, title, body, votes, userName } = opinion;
+  const { upvoteOpinion, downvoteOpinion } = use(OpinionsContext);
+
+  async function upvodeAction() {
+    await upvoteOpinion(id as string);
+  }
+
+  async function downvodeAction() {
+    await downvoteOpinion(id as string);
+  }
 
   return (
     <article>
@@ -16,7 +25,7 @@ const Opinion: React.FC<Props> = ({ opinion }) => {
       </header>
       <p>{body}</p>
       <form className="votes">
-        <button>
+        <button formAction={upvodeAction}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -36,7 +45,7 @@ const Opinion: React.FC<Props> = ({ opinion }) => {
 
         <span>{votes}</span>
 
-        <button>
+        <button formAction={downvodeAction}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

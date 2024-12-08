@@ -2,7 +2,7 @@
   "opinions": [
     {
       "id": 1733647454989,
-      "votes": 0,
+      "votes": 2,
       "userName": "Nemanja",
       "title": "React Forms",
       "body": "Hey React Forms are really cool!"
@@ -16,7 +16,7 @@
     },
     {
       "id": 1733646921181,
-      "votes": 0,
+      "votes": 1,
       "userName": "Nemanja",
       "title": "React is awesome",
       "body": "I really like it - everyone should learn it!"
