@@ -6,11 +6,11 @@ import React, {
 } from "react";
 
 export type TOpinion = {
-  id: string;
+  id?: string;
   title: string;
   body: string;
   userName: string;
-  votes: number;
+  votes?: number;
 };
 
 type OpinionsContextType = {

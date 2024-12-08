@@ -1,7 +1,10 @@
-import React, { useActionState } from "react";
+import React, { use, useActionState } from "react";
+import { OpinionsContext } from "../store/OpinionContext.tsx";
 
 const NewOpinion: React.FC = () => {
-  const submitNewOpinionAction = (
+  const { addOpinion } = use(OpinionsContext);
+
+  const submitNewOpinionAction = async (
     prevState: { errors: null | string[] },
     formData: FormData,
   ) => {
@@ -35,7 +38,19 @@ const NewOpinion: React.FC = () => {
     }
 
     // submit to the backend
-    return { errors: null, enteredValues: { name, title, body } };
+    await addOpinion({
+      body,
+      userName: name,
+      title,
+    });
+    return {
+      errors: null,
+      enteredValues: {
+        name: "",
+        title: "",
+        body: "",
+      },
+    };
   };
 
   const [formState, formAction] = useActionState(submitNewOpinionAction, {
